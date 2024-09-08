@@ -13,14 +13,17 @@
 #' @export
 minimumN <- function(x1, x2 = NULL) {
   if (is.null(x2)) {
-    d <- abs(mean(x1)) / sd(x1)
+    #effect size for one-sample t-test
+    d <- abs(mean(x1)) / sd(x1) 
   } else {
-    n1 <- length(x1)
+    #calculate sample size 
+    n1 <- length(x1) 
     n2 <- length(x2)
+    #calculate pooled standard deviation
     pooled_sd <- sqrt(((n1 - 1) * sd(x1)^2 + (n2 - 1) * sd(x2)^2) / (n1 + n2 - 2))
     d <- abs(mean(x1) - mean(x2)) / pooled_sd
   }
-
+  #power analysis 
   result <- pwr.t.test(d = d, power = 0.80, sig.level = 0.05,
                        type = if (is.null(x2)) "one.sample" else "two.sample",
                        alternative = "two.sided")
